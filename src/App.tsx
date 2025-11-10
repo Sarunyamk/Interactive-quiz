@@ -205,8 +205,8 @@ export default function App() {
         Gradients.cool
       )}
     >
-      <div className="w-full max-w-2xl">
-        <div className="mb-6">
+      <div className="w-full max-w-7xl">
+        <div className="mb-10">
           <Button
             onClick={() => setMode('menu')}
             variant="outline"
