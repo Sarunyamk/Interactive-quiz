@@ -77,10 +77,10 @@ export default function QuizQuestion({
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-gray-900 rounded-2xl p-8 mb-6 shadow-2xl border border-gray-700"
+        className="bg-gray-900 rounded-2xl p-8 mb-6 shadow-2xl border border-gray-700 text-white"
       >
         <div className="mb-4">
-          <span className="bg-yellow-500 text-gray-900 px-3 py-1 rounded-full">
+          <span className="bg-yellow-500 text-white px-3 py-1 rounded-full">
             Question
           </span>
         </div>

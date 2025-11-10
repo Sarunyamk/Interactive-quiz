@@ -1,0 +1,155 @@
+import { useState, useEffect } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
+import { Confetti } from '../Confetti'
+import { CountdownTimer } from '../CountdownTimer'
+import { FadeInMotion } from '../FadeInUp'
+
+interface ImageQuizData {
+  imageUrl: string
+  questionText?: string
+  options: string[]
+  correctAnswer: number
+}
+
+interface CodeImageProps {
+  quizData: ImageQuizData
+}
+
+export function CodeImage({ quizData }: CodeImageProps) {
+  const [imageLoaded, setImageLoaded] = useState(false)
+  const [showOptions, setShowOptions] = useState(0)
+  const [showTimer, setShowTimer] = useState(false)
+  const [showAnswer, setShowAnswer] = useState(false)
+  const [celebrate, setCelebrate] = useState(false)
+
+  useEffect(() => {
+    setImageLoaded(false)
+    setShowOptions(0)
+    setShowTimer(false)
+    setShowAnswer(false)
+    setCelebrate(false)
+  }, [quizData])
+
+  useEffect(() => {
+    if (imageLoaded && showOptions < 4) {
+      const timer = setTimeout(() => {
+        setShowOptions((prev) => prev + 1)
+      }, 300)
+      return () => clearTimeout(timer)
+    } else if (imageLoaded && showOptions === 4) {
+      const timer = setTimeout(() => {
+        setShowTimer(true)
+      }, 3000)
+      return () => clearTimeout(timer)
+    }
+  }, [imageLoaded, showOptions])
+
+  const handleTimerComplete = () => {
+    setShowAnswer(true)
+    setCelebrate(true)
+  }
+
+  return (
+    <div className="w-full max-w-2xl mx-auto p-6 space-y-6">
+      <FadeInMotion className="bg-gray-900 rounded-2xl p-8 shadow-lg">
+        <motion.img
+          src={quizData.imageUrl}
+          alt="Quiz question"
+          className="w-full rounded-lg"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
+          onLoad={() => setImageLoaded(true)}
+        />
+      </FadeInMotion>
+
+      {/* Question Text */}
+      {imageLoaded && quizData.questionText && (
+        <FadeInMotion
+          direction="left"
+          className="text-center text-xl text-white bg-gray-900 backdrop-blur rounded-xl p-4 shadow-md"
+        >
+          {quizData.questionText}
+        </FadeInMotion>
+      )}
+
+      {/* Options */}
+      {imageLoaded && (
+        <div className="grid grid-cols-1 gap-4">
+          {['A', 'B', 'C', 'D'].map(
+            (letter, index) =>
+              index < showOptions && (
+                <motion.div
+                  key={letter}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{
+                    opacity: 1,
+                    x: 0,
+                    scale:
+                      showAnswer && index === quizData.correctAnswer ? 1.05 : 1,
+                  }}
+                  transition={{
+                    duration: 0.3,
+                    scale: { duration: 0.5, delay: 0 },
+                  }}
+                  className={`relative p-6 rounded-xl shadow-md transition-all ${
+                    showAnswer && index === quizData.correctAnswer
+                      ? 'bg-linear-to-r from-green-400 to-emerald-500 text-white'
+                      : 'bg-white hover:shadow-lg'
+                  }`}
+                >
+                  {showAnswer &&
+                    index === quizData.correctAnswer &&
+                    celebrate && <Confetti />}
+                  <div className="flex items-center gap-4">
+                    <div
+                      className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                        showAnswer && index === quizData.correctAnswer
+                          ? 'bg-white text-green-500'
+                          : 'bg-linear-to-r from-purple-500 to-blue-500 text-white'
+                      }`}
+                    >
+                      {letter}
+                    </div>
+                    <div className="flex-1 font-mono">
+                      {quizData.options[index]}
+                    </div>
+                  </div>
+                </motion.div>
+              )
+          )}
+        </div>
+      )}
+
+      {/* Timer */}
+      {showTimer && !showAnswer && (
+        <CountdownTimer duration={10} onComplete={handleTimerComplete} />
+      )}
+
+       <AnimatePresence>
+        {showAnswer && (
+          <FadeInMotion
+            className="mt-6 text-center"
+          >
+            <motion.div
+              animate={{
+                scale: [1, 1.1, 1],
+              }}
+              transition={{
+                duration: 2.5,
+                repeat: 3,
+              }}
+              className="inline-block bg-green-500 text-white px-6 py-3 rounded-full shadow-lg animate-bounce"
+            >
+              ✨ Correct Answer is{' '}
+              <span className="font-bold underline">
+                {['A', 'B', 'C', 'D'][quizData.correctAnswer]}
+              </span>{' '}
+              ! ✨
+            </motion.div>
+          </FadeInMotion>
+        )}
+      </AnimatePresence>
+    </div>
+  )
+}
