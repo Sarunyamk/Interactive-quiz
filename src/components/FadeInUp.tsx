@@ -10,6 +10,7 @@ interface FadeInProps {
   distance?: number
   direction?: Direction
   className?: string
+  style? : React.CSSProperties
 }
 
 export function FadeInMotion({
@@ -19,6 +20,7 @@ export function FadeInMotion({
   distance = 50,
   direction = 'up',
   className = '',
+  style
 }: FadeInProps) {
   const getOffset = () => {
     switch (direction) {
@@ -41,6 +43,7 @@ export function FadeInMotion({
       animate={{ opacity: 1, x: 0, y: 0 }}
       transition={{ duration, delay }}
       className={className}
+      style={style}
     >
       {children}
     </motion.div>

@@ -1,29 +1,21 @@
-import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Code, Image, Users, ListChecks, Settings } from 'lucide-react'
+import { Code, Image, ListChecks, Settings, Users } from 'lucide-react'
+import { useEffect, useState } from 'react'
 
-import { Button } from './components/ui/button'
-import { ManageCodeQuiz } from './components/code-manage/ManageCodeQuiz'
-import { ManageCodeImage } from './components/code-manage/ManageCodeImage'
-import { ManageJuniorSenior } from './components/code-manage/ManageJuniorSenior'
-import { ManageMultipleQuiz } from './components/code-manage/ManageMultipleQuiz'
-import { CodeQuiz } from './components/code-content/CodeQuiz'
 import { CodeImage } from './components/code-content/CodeImage'
 import { CodeJuniorVsSenior } from './components/code-content/CodeJuniorVsSenior'
 import { CodeMultipleQuiz } from './components/code-content/CodeMultipleQuiz'
-import { Gradients } from './style'
+import { CodeQuiz } from './components/code-content/CodeQuiz'
+import { ManageCodeImage } from './components/code-manage/ManageCodeImage'
+import { ManageCodeQuiz } from './components/code-manage/ManageCodeQuiz'
+import { ManageJuniorSenior } from './components/code-manage/ManageJuniorSenior'
+import { ManageMultipleQuiz } from './components/code-manage/ManageMultipleQuiz'
+import { Button } from './components/ui/button'
+import { THEME_MAP, type Mode } from './lib/constant.theme'
+import { toCSS } from './lib/theme.helper'
+import type { ThemeConfig } from './lib/theme.tpye'
 import { cn } from './lib/utils'
-
-type Mode =
-  | 'menu'
-  | 'code-quiz'
-  | 'code-image'
-  | 'junior-senior'
-  | 'multiple-quiz'
-  | 'manage-code-quiz'
-  | 'manage-code-image'
-  | 'manage-junior-senior'
-  | 'manage-multiple-quiz'
+import { Gradients } from './style'
 
 const menuButtons = [
   {
@@ -59,10 +51,35 @@ const menuButtons = [
     color: 'from-orange-500 to-amber-500',
   },
 ]
+const defaultTheme: ThemeConfig = {
+  mainBg: { type: 'solid', color1: '#000000' },
+  questionCodeBg: { type: 'solid', color1: '#1f2937' },
+  questionCodeTextColor: { type: 'solid', color1: '#ffffff' },
+  questionBg: { type: 'solid', color1: '#1f2937' },
+  questionTextColor: { type: 'solid', color1: '#ffffff' },
+  choiceBg: { type: 'solid', color1: '#ffffff' },
+  choiceTextColor: { type: 'solid', color1: '#000000' },
+  circleBg: { type: 'solid', color1: '#7c3aed' },
+  circleTextColor: { type: 'solid', color1: '#ffffff' },
+  correctBg: { type: 'solid', color1: '#10b981' },
+  correctTextColor: { type: 'solid', color1: '#ffffff' },
+}
 
 export default function App() {
   const [mode, setMode] = useState<Mode>('menu')
   const [selectedQuiz, setSelectedQuiz] = useState<any>(null)
+  const [theme, setTheme] = useState<ThemeConfig>(defaultTheme)
+
+  const themeKey = THEME_MAP[mode]
+
+  useEffect(() => {
+    const saved = localStorage.getItem(themeKey)
+    if (saved) setTheme(JSON.parse(saved))
+  }, [mode])
+
+  useEffect(() => {
+    localStorage.setItem(themeKey, JSON.stringify(theme))
+  }, [theme, mode])
 
   if (mode === 'menu') {
     return (
@@ -131,6 +148,8 @@ export default function App() {
         )}
       >
         <ManageCodeQuiz
+          theme={theme}
+          setTheme={setTheme}
           onSelect={(quiz) => {
             setSelectedQuiz(quiz)
             setMode('code-quiz')
@@ -200,12 +219,10 @@ export default function App() {
 
   return (
     <div
-      className={cn(
-        'min-h-screen flex items-center justify-center p-4',
-        Gradients.cool
-      )}
+      className="min-h-screen flex items-center justify-center p-4"
+      style={toCSS(theme.mainBg)}
     >
-      <div className="w-full max-w-7xl">
+      <div className="w-full max-w-7xl mx-auto">
         <div className="mb-10">
           <Button
             onClick={() => setMode('menu')}
@@ -222,7 +239,9 @@ export default function App() {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.3 }}
         >
-          {mode === 'code-quiz' && <CodeQuiz quizData={selectedQuiz} />}
+          {mode === 'code-quiz' && (
+            <CodeQuiz quizData={selectedQuiz} theme={theme} />
+          )}
           {mode === 'code-image' && <CodeImage quizData={selectedQuiz} />}
           {mode === 'junior-senior' && (
             <CodeJuniorVsSenior codeData={selectedQuiz} />

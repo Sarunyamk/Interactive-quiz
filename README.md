@@ -1,73 +1,58 @@
-# React + TypeScript + Vite
+# 🧠 CodeMultipleQuiz Component
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+An interactive multiple-choice quiz component built with **React**, **Framer Motion**, and **TailwindCSS**, featuring animated transitions, countdown timers, confetti effects, and smooth progress tracking — designed for modern E-Learning systems.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Tech Stack
 
-## React Compiler
+| Category | Technology |
+|-----------|-------------|
+| **Framework** | [React 18+]|
+| **Language** | [TypeScript]|
+| **Animation** | [Framer Motion]|
+| **Styling** | [TailwindCSS]|
+| **State Management** | React Hooks (useState, useEffect) |
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## ✨ Features
 
-## Expanding the ESLint configuration
+✅ **Animated transitions** — Smooth fade/slide motion for every question.
+✅ **Typewriter effect** — Each question text appears like real typing.
+✅ **Countdown timer** — Auto-starts for each question.
+✅ **Answer reveal** — Highlights the correct answer with animation.
+✅ **Confetti celebration** — Plays when the user gets it right.
+✅ **Auto-progress overlay** — Countdown overlay between questions.
+✅ **Final overlay screen** — Displays completion message at the end.
+✅ **Fully responsive** — Adapts perfectly to desktop, tablet, and mobile.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### 🎮 code-content (for Students)
+| Feature | Description |
+|----------|--------------|
+| 🧠 **CodeMultipleQuiz** | Animated multiple-choice quiz with timer, confetti, and auto-progress overlay |
+| 💬 **CodeQuiz** | General quiz logic supporting text-based or code-based questions |
+| 🧩 **CodeJuniorVsSenior** | Comparison challenge component (“Junior vs Senior” coding questions) |
+| 🖼 **CodeImage** | Image-based quiz / code snippet visual questions |
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### ⚙️ code-manage (for Admins)
+| Feature | Description |
+|----------|--------------|
+| 🧾 **ManageMultipleQuiz** | Create, edit, delete multiple-choice questions |
+| 🧮 **ManageCodeQuiz** | Manage text-based or code-driven quizzes |
+| 🧑‍💻 **ManageJuniorSenior** | Curate questions for Junior-vs-Senior challenges |
+| 🖼 **ManageCodeImage** | Upload and organize image-based quizzes |
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+---
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 🧠 CodeMultipleQuiz Component
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+An interactive **multiple-choice** quiz component featuring:
+- 🎬 Animated fade-in/out transitions
+- ⌨️ Typewriter effect for question text
+- ⏳ Countdown timer per question
+- 💥 Confetti animation on correct answer
+- 🕐 Overlay countdown before next question
+- 🏁 Final overlay message:
+  > **🎉 How many questions did you get right?**
