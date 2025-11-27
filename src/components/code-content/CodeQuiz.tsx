@@ -1,5 +1,5 @@
 import { toCSS } from '@/lib/theme.helper'
-import type { ThemeConfig } from '@/lib/theme.tpye'
+import type { ThemeConfig } from '@/lib/theme.type'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
 import { Confetti } from '../Confetti'

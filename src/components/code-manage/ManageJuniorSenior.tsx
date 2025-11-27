@@ -1,6 +1,8 @@
+import type { ThemeConfig } from '@/lib/theme.type'
 import { motion } from 'framer-motion'
 import { Edit2, Plus, Save, Trash2, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { ThemeSettingsModal } from '../ThemeSettingsModal'
 import { Button } from '../ui/button'
 import { Card } from '../ui/card'
 import { Label } from '../ui/label'
@@ -16,15 +18,20 @@ interface JuniorSeniorData {
 interface ManageJuniorSeniorProps {
   onSelect: (data: JuniorSeniorData) => void
   onBack: () => void
+  theme: ThemeConfig
+  setTheme: (t: ThemeConfig) => void
 }
 
 export function ManageJuniorSenior({
   onSelect,
   onBack,
+  theme,
+  setTheme,
 }: ManageJuniorSeniorProps) {
   const [items, setItems] = useState<JuniorSeniorData[]>([])
   const [isEditing, setIsEditing] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
+  const [openTheme, setOpenTheme] = useState(false)
   const [formData, setFormData] = useState({
     questionText: '',
     juniorCode: '',
@@ -158,11 +165,22 @@ export function ManageJuniorSenior({
             <Plus className="w-4 h-4 mr-2" />
             เพิ่มโค้ด
           </Button>
+          <Button variant="outline" onClick={() => setOpenTheme(true)}>
+            ⚙️ ตั้งค่า Theme
+          </Button>
           <Button onClick={onBack} variant="outline">
             กลับ
           </Button>
         </div>
       </div>
+      {openTheme && (
+        <ThemeSettingsModal
+          mode="junior-senior"
+          theme={theme}
+          onChange={(updated) => setTheme(updated)}
+          onClose={() => setOpenTheme(false)}
+        />
+      )}
 
       <div className="grid grid-cols-1 gap-4">
         {items.length === 0 ? (

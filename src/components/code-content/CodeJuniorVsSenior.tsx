@@ -1,7 +1,9 @@
-import { useState } from 'react'
+import { toCSS } from '@/lib/theme.helper'
+import type { ThemeConfig } from '@/lib/theme.type'
 import { motion } from 'framer-motion'
-import { TypewriterText } from '../TypewriterText'
+import { useState } from 'react'
 import { FadeInMotion } from '../FadeInUp'
+import { TypewriterText } from '../TypewriterText'
 
 interface JuniorVsSeniorData {
   juniorCode: string
@@ -10,16 +12,21 @@ interface JuniorVsSeniorData {
 
 interface JuniorVsSeniorProps {
   codeData: JuniorVsSeniorData
+  theme: ThemeConfig
 }
 
-export function CodeJuniorVsSenior({ codeData }: JuniorVsSeniorProps) {
+export function CodeJuniorVsSenior({ codeData, theme }: JuniorVsSeniorProps) {
   const [juniorComplete, setJuniorComplete] = useState(false)
 
   return (
     <div className="w-full max-w-2xl mx-auto p-6 space-y-6">
       <FadeInMotion
         direction="left"
-        className="bg-gray-900 rounded-2xl p-8 shadow-lg text-white"
+        className="rounded-2xl p-8 shadow-lg"
+        style={{
+          ...toCSS(theme.questionCodeBg),
+          ...toCSS(theme.questionCodeTextColor),
+        }}
       >
         <div className="mb-4 flex items-center gap-2">
           <div className="w-3 h-3 rounded-full bg-blue-600"></div>
@@ -38,7 +45,11 @@ export function CodeJuniorVsSenior({ codeData }: JuniorVsSeniorProps) {
       {juniorComplete && (
         <FadeInMotion
           direction="left"
-          className="bg-gray-900 rounded-2xl p-8 shadow-lg text-white"
+          className=" rounded-2xl p-8 shadow-lg "
+          style={{
+            ...toCSS(theme.questionCodeBg),
+            ...toCSS(theme.questionCodeTextColor),
+          }}
         >
           <div className="mb-4 flex items-center gap-2">
             <div className="w-3 h-3 rounded-full bg-green-500"></div>
@@ -58,7 +69,13 @@ export function CodeJuniorVsSenior({ codeData }: JuniorVsSeniorProps) {
           animate={{ scale: 1, rotate: 0 }}
           transition={{ type: 'spring', duration: 0.8 }}
         >
-          <div className="w-16 h-16 rounded-full bg-linear-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white shadow-xl">
+          <div
+            className="w-16 h-16 rounded-full  flex items-center justify-center  shadow-xl"
+            style={{
+              ...toCSS(theme.circleBg),
+              ...toCSS(theme.circleTextColor),
+            }}
+          >
             VS
           </div>
         </motion.div>

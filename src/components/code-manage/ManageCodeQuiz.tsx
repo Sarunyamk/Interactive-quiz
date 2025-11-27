@@ -1,4 +1,4 @@
-import type { ThemeConfig } from '@/lib/theme.tpye'
+import type { ThemeConfig } from '@/lib/theme.type'
 import { motion } from 'framer-motion'
 import { Edit2, Plus, Save, Trash2, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
@@ -20,8 +20,8 @@ interface QuizData {
 interface ManageCodeQuizProps {
   onSelect: (quiz: QuizData) => void
   onBack: () => void
-  theme: ThemeConfig // ✅ รับ theme มาจาก App
-  setTheme: (t: ThemeConfig) => void // ✅ ใช้ setTheme จาก App
+  theme: ThemeConfig
+  setTheme: (t: ThemeConfig) => void
 }
 
 export function ManageCodeQuiz({
@@ -246,11 +246,11 @@ export function ManageCodeQuiz({
             <Plus className="w-4 h-4 mr-2" />
             เพิ่มคำถาม
           </Button>
-          <Button onClick={onBack} variant="outline">
-            กลับ
-          </Button>
           <Button variant="outline" onClick={() => setOpenTheme(true)}>
             ⚙️ ตั้งค่า Theme
+          </Button>
+          <Button onClick={onBack} variant="outline">
+            กลับ
           </Button>
         </div>
       </div>

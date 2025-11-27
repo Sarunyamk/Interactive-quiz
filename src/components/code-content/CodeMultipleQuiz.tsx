@@ -1,9 +1,11 @@
-import { useState, useEffect } from 'react'
+import { toCSS } from '@/lib/theme.helper'
+import type { ThemeConfig } from '@/lib/theme.type'
 import { AnimatePresence, motion } from 'framer-motion'
-import { TypewriterText } from '../TypewriterText'
+import { useEffect, useState } from 'react'
 import { Confetti } from '../Confetti'
 import { CountdownTimer } from '../CountdownTimer'
 import { FadeInMotion } from '../FadeInUp'
+import { TypewriterText } from '../TypewriterText'
 
 interface QuizItem {
   questionText?: string
@@ -14,9 +16,10 @@ interface QuizItem {
 
 interface MultipleQuizProps {
   quizzes: QuizItem[]
+  theme: ThemeConfig
 }
 
-export function CodeMultipleQuiz({ quizzes }: MultipleQuizProps) {
+export function CodeMultipleQuiz({ quizzes, theme }: MultipleQuizProps) {
   const [currentQuizIndex, setCurrentQuizIndex] = useState(0)
   const [questionComplete, setQuestionComplete] = useState(false)
   const [showOptions, setShowOptions] = useState(0)
@@ -110,7 +113,11 @@ export function CodeMultipleQuiz({ quizzes }: MultipleQuizProps) {
       <FadeInMotion
         direction="left"
         key={currentQuizIndex}
-        className="bg-gray-900 rounded-2xl p-8 shadow-lg text-white"
+        className="rounded-2xl p-8 shadow-lg"
+        style={{
+          ...toCSS(theme.questionCodeBg),
+          ...toCSS(theme.questionCodeTextColor),
+        }}
       >
         <div className="font-mono text-lg">
           <TypewriterText
@@ -124,7 +131,11 @@ export function CodeMultipleQuiz({ quizzes }: MultipleQuizProps) {
       {questionComplete && currentQuiz.questionText && (
         <FadeInMotion
           direction="up"
-          className="text-center text-xl text-white bg-gray-900 backdrop-blur rounded-xl p-4 shadow-md"
+          className="text-center text-xl backdrop-blur rounded-xl p-4 shadow-md"
+          style={{
+            ...toCSS(theme.questionBg),
+            ...toCSS(theme.questionTextColor),
+          }}
         >
           {currentQuiz.questionText}
         </FadeInMotion>
@@ -151,22 +162,26 @@ export function CodeMultipleQuiz({ quizzes }: MultipleQuizProps) {
                     duration: 0.3,
                     scale: { duration: 0.5, delay: 0 },
                   }}
-                  className={`relative p-6 rounded-xl shadow-md transition-all ${
-                    showAnswer && index === currentQuiz.correctAnswer
-                      ? 'bg-linear-to-r from-green-400 to-emerald-500 text-white'
-                      : 'bg-white hover:shadow-lg'
-                  }`}
+                  style={{
+                    ...(showAnswer && index === currentQuiz.correctAnswer
+                      ? toCSS(theme.correctBg)
+                      : toCSS(theme.choiceBg)),
+                    ...(showAnswer && index === currentQuiz.correctAnswer
+                      ? toCSS(theme.correctTextColor)
+                      : toCSS(theme.choiceTextColor)),
+                  }}
+                  className="relative p-6 rounded-xl shadow-md transition-all"
                 >
                   {showAnswer &&
                     index === currentQuiz.correctAnswer &&
                     celebrate && <Confetti />}
                   <div className="flex items-center gap-4">
                     <div
-                      className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                        showAnswer && index === currentQuiz.correctAnswer
-                          ? 'bg-white text-green-500'
-                          : 'bg-linear-to-br from-purple-500 to-blue-500 text-white'
-                      }`}
+                      className={`w-10 h-10 rounded-full flex items-center justify-center`}
+                      style={{
+                        ...toCSS(theme.circleBg),
+                        ...toCSS(theme.circleTextColor),
+                      }}
                     >
                       {letter}
                     </div>

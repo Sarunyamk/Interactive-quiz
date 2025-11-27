@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { Code, Image, ListChecks, Settings, Users } from 'lucide-react'
+import { Settings } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
 import { CodeImage } from './components/code-content/CodeImage'
@@ -12,58 +12,11 @@ import { ManageJuniorSenior } from './components/code-manage/ManageJuniorSenior'
 import { ManageMultipleQuiz } from './components/code-manage/ManageMultipleQuiz'
 import { Button } from './components/ui/button'
 import { THEME_MAP, type Mode } from './lib/constant.theme'
+import { defaultTheme, menuButtons } from './lib/data'
 import { toCSS } from './lib/theme.helper'
-import type { ThemeConfig } from './lib/theme.tpye'
+import type { ThemeConfig } from './lib/theme.type'
 import { cn } from './lib/utils'
 import { Gradients } from './style'
-
-const menuButtons = [
-  {
-    id: 'code-quiz' as Mode,
-    manageId: 'manage-code-quiz' as Mode,
-    icon: Code,
-    title: 'Code Quiz',
-    description: 'คำถามโค้ด + ตัวเลือก',
-    color: 'from-purple-500 to-blue-500',
-  },
-  {
-    id: 'code-image' as Mode,
-    manageId: 'manage-code-image' as Mode,
-    icon: Image,
-    title: 'Code Image',
-    description: 'รูปภาพคำถาม + ตัวเลือก',
-    color: 'from-pink-500 to-rose-500',
-  },
-  {
-    id: 'junior-senior' as Mode,
-    manageId: 'manage-junior-senior' as Mode,
-    icon: Users,
-    title: 'Junior vs Senior',
-    description: 'เปรียบเทียบโค้ด Junior & Senior',
-    color: 'from-green-500 to-emerald-500',
-  },
-  {
-    id: 'multiple-quiz' as Mode,
-    manageId: 'manage-multiple-quiz' as Mode,
-    icon: ListChecks,
-    title: 'Multiple Quiz',
-    description: 'ชุดคำถามหลายข้อ',
-    color: 'from-orange-500 to-amber-500',
-  },
-]
-const defaultTheme: ThemeConfig = {
-  mainBg: { type: 'solid', color1: '#000000' },
-  questionCodeBg: { type: 'solid', color1: '#1f2937' },
-  questionCodeTextColor: { type: 'solid', color1: '#ffffff' },
-  questionBg: { type: 'solid', color1: '#1f2937' },
-  questionTextColor: { type: 'solid', color1: '#ffffff' },
-  choiceBg: { type: 'solid', color1: '#ffffff' },
-  choiceTextColor: { type: 'solid', color1: '#000000' },
-  circleBg: { type: 'solid', color1: '#7c3aed' },
-  circleTextColor: { type: 'solid', color1: '#ffffff' },
-  correctBg: { type: 'solid', color1: '#10b981' },
-  correctTextColor: { type: 'solid', color1: '#ffffff' },
-}
 
 export default function App() {
   const [mode, setMode] = useState<Mode>('menu')
@@ -169,6 +122,8 @@ export default function App() {
         )}
       >
         <ManageCodeImage
+          theme={theme}
+          setTheme={setTheme}
           onSelect={(quiz) => {
             setSelectedQuiz(quiz)
             setMode('code-image')
@@ -188,6 +143,8 @@ export default function App() {
         )}
       >
         <ManageJuniorSenior
+          theme={theme}
+          setTheme={setTheme}
           onSelect={(data) => {
             setSelectedQuiz(data)
             setMode('junior-senior')
@@ -207,6 +164,8 @@ export default function App() {
         )}
       >
         <ManageMultipleQuiz
+          theme={theme}
+          setTheme={setTheme}
           onSelect={(quizSet) => {
             setSelectedQuiz(quizSet)
             setMode('multiple-quiz')
@@ -242,12 +201,14 @@ export default function App() {
           {mode === 'code-quiz' && (
             <CodeQuiz quizData={selectedQuiz} theme={theme} />
           )}
-          {mode === 'code-image' && <CodeImage quizData={selectedQuiz} />}
+          {mode === 'code-image' && (
+            <CodeImage quizData={selectedQuiz} theme={theme} />
+          )}
           {mode === 'junior-senior' && (
-            <CodeJuniorVsSenior codeData={selectedQuiz} />
+            <CodeJuniorVsSenior codeData={selectedQuiz} theme={theme}/>
           )}
           {mode === 'multiple-quiz' && (
-            <CodeMultipleQuiz quizzes={selectedQuiz?.quizzes} />
+            <CodeMultipleQuiz quizzes={selectedQuiz?.quizzes} theme={theme} />
           )}
         </motion.div>
       </div>
