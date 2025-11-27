@@ -420,6 +420,7 @@ export function ManageMultipleQuiz({
 
       {openTheme && (
         <ThemeSettingsModal
+          mode="multiple-quiz"
           theme={theme}
           onChange={(updated) => setTheme(updated)}
           onClose={() => setOpenTheme(false)}

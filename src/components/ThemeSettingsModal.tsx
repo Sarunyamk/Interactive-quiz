@@ -1,4 +1,8 @@
-import { THEME_KEYS_BY_MODE } from '@/lib/constant.theme'
+import {
+  THEME_KEYS_BY_MODE,
+  type BaseMode,
+  type ThemeKey,
+} from '@/lib/constant.theme'
 import type { ThemeColor, ThemeConfig } from '@/lib/theme.type'
 import { useState } from 'react'
 import { Button } from './ui/button'
@@ -6,21 +10,23 @@ import { Card } from './ui/card'
 import { Input } from './ui/input'
 import { Label } from './ui/label'
 
-export function ThemeSettingsModal({
-  theme,
-  onChange,
-  onClose,
-}: {
+type Props = {
   theme: ThemeConfig
   onChange: (theme: ThemeConfig) => void
   onClose: () => void
-}) {
+  mode: BaseMode | `manage-${BaseMode}`
+}
+
+export function ThemeSettingsModal({ theme, onChange, onClose, mode }: Props) {
   const [tempTheme, setTempTheme] = useState(theme)
 
-  // แสดงเฉพาะ key ที่ mode นั้นใช้
-  const visibleKeys = THEME_KEYS_BY_MODE[mode] ?? []
+  const baseMode = (
+    mode.startsWith('manage-') ? mode.replace('manage-', '') : mode
+  ) as BaseMode
 
-  const updateField = (key: string, updated: Partial<ThemeColor>) => {
+  const visibleKeys = THEME_KEYS_BY_MODE[baseMode]
+
+  const updateField = (key: ThemeKey, updated: Partial<ThemeColor>) => {
     setTempTheme((prev) => ({
       ...prev,
       [key]: {

@@ -64,15 +64,23 @@ export const THEME_KEYS_BY_MODE = {
     "circleBg",
     "circleTextColor"
   ],
-};
+}as const
+
+export type BaseMode = keyof typeof THEME_KEYS_BY_MODE
+export type ThemeKey = (typeof THEME_KEYS_BY_MODE)[BaseMode][number]
+
+// export type Mode =
+//   | 'menu'
+//   | 'code-quiz'
+//   | 'code-image'
+//   | 'junior-senior'
+//   | 'multiple-quiz'
+//   | 'manage-code-quiz'
+//   | 'manage-code-image'
+//   | 'manage-junior-senior'
+//   | 'manage-multiple-quiz'
 
 export type Mode =
   | 'menu'
-  | 'code-quiz'
-  | 'code-image'
-  | 'junior-senior'
-  | 'multiple-quiz'
-  | 'manage-code-quiz'
-  | 'manage-code-image'
-  | 'manage-junior-senior'
-  | 'manage-multiple-quiz'
+  | BaseMode
+  | `manage-${BaseMode}`
