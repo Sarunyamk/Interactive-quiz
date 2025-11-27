@@ -11,7 +11,7 @@ import { ManageCodeQuiz } from './components/code-manage/ManageCodeQuiz'
 import { ManageJuniorSenior } from './components/code-manage/ManageJuniorSenior'
 import { ManageMultipleQuiz } from './components/code-manage/ManageMultipleQuiz'
 import { Button } from './components/ui/button'
-import { THEME_MAP, type Mode } from './lib/constant.theme'
+import { THEME_KEYS_BY_MODE, THEME_MAP, type Mode } from './lib/constant.theme'
 import { defaultTheme, menuButtons } from './lib/data'
 import { toCSS } from './lib/theme.helper'
 import type { ThemeConfig } from './lib/theme.type'
@@ -27,11 +27,31 @@ export default function App() {
 
   useEffect(() => {
     const saved = localStorage.getItem(themeKey)
-    if (saved) setTheme(JSON.parse(saved))
+
+    if (!saved) return setTheme(defaultTheme)
+
+    const obj = JSON.parse(saved)
+    const allowedKeys = THEME_KEYS_BY_MODE[mode.replace('manage-', '')] ?? []
+
+    const merged: any = {}
+
+    // เอาเฉพาะคีย์ที่ allowed เท่านั้น
+    allowedKeys.forEach((k) => {
+      merged[k] = obj[k] ?? defaultTheme[k]
+    })
+
+    setTheme(merged)
   }, [mode])
 
   useEffect(() => {
-    localStorage.setItem(themeKey, JSON.stringify(theme))
+    const keys = THEME_KEYS_BY_MODE[mode.replace('manage-', '')] ?? []
+
+    const filteredTheme: any = {}
+    keys.forEach((k) => {
+      filteredTheme[k] = theme[k]
+    })
+
+    localStorage.setItem(themeKey, JSON.stringify(filteredTheme))
   }, [theme, mode])
 
   if (mode === 'menu') {
@@ -205,7 +225,7 @@ export default function App() {
             <CodeImage quizData={selectedQuiz} theme={theme} />
           )}
           {mode === 'junior-senior' && (
-            <CodeJuniorVsSenior codeData={selectedQuiz} theme={theme}/>
+            <CodeJuniorVsSenior codeData={selectedQuiz} theme={theme} />
           )}
           {mode === 'multiple-quiz' && (
             <CodeMultipleQuiz quizzes={selectedQuiz?.quizzes} theme={theme} />

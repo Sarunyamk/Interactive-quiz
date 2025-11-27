@@ -1,4 +1,5 @@
-import type { ThemeColor } from '@/lib/theme.type'
+import { THEME_KEYS_BY_MODE } from '@/lib/constant.theme'
+import type { ThemeColor, ThemeConfig } from '@/lib/theme.type'
 import { useState } from 'react'
 import { Button } from './ui/button'
 import { Card } from './ui/card'
@@ -9,11 +10,15 @@ export function ThemeSettingsModal({
   theme,
   onChange,
   onClose,
-  mode = 'code-quiz',
+}: {
+  theme: ThemeConfig
+  onChange: (theme: ThemeConfig) => void
+  onClose: () => void
 }) {
   const [tempTheme, setTempTheme] = useState(theme)
 
-  const modeImage = mode === 'code-image'
+  // แสดงเฉพาะ key ที่ mode นั้นใช้
+  const visibleKeys = THEME_KEYS_BY_MODE[mode] ?? []
 
   const updateField = (key: string, updated: Partial<ThemeColor>) => {
     setTempTheme((prev) => ({
@@ -31,96 +36,110 @@ export function ThemeSettingsModal({
         <h2 className="text-xl font-semibold mb-4">🎨 ตั้งค่าธีม Quiz</h2>
 
         <div className="space-y-6 max-h-[70vh] overflow-y-auto pr-2">
-          {Object.entries(tempTheme).map(([key, config]) => (
-            <div key={key} className="border p-4 rounded-xl bg-gray-50">
-              <h3 className="font-semibold mb-2">{key}</h3>
+          {visibleKeys.map((key) => {
+            const config = tempTheme[key]
 
-              {/* Toggle */}
-              <div className="flex gap-4 mb-3">
-                <label className="flex items-center gap-2">
-                  <input
-                    type="radio"
-                    checked={config.type === 'solid'}
-                    onChange={() => updateField(key, { type: 'solid' })}
-                  />
-                  สีเดียว
-                </label>
+            if (!config) return null
 
-                <label className="flex items-center gap-2">
-                  <input
-                    type="radio"
-                    checked={config.type === 'gradient'}
-                    onChange={() => updateField(key, { type: 'gradient' })}
-                  />
-                  Gradient
-                </label>
-              </div>
+            return (
+              <div key={key} className="border p-4 rounded-xl bg-gray-50">
+                <h3 className="font-semibold mb-2">{key}</h3>
 
-              {/* Color Picker */}
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label>Color 1</Label>
-                  <Input
-                    type="color"
-                    value={config.color1}
-                    onChange={(e) =>
-                      updateField(key, { color1: e.target.value })
-                    }
-                  />
+                {/* Toggle Solid / Gradient */}
+                <div className="flex gap-4 mb-3">
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="radio"
+                      checked={config.type === 'solid'}
+                      onChange={() =>
+                        updateField(key, { type: 'solid', color2: undefined })
+                      }
+                    />
+                    สีเดียว
+                  </label>
+
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="radio"
+                      checked={config.type === 'gradient'}
+                      onChange={() =>
+                        updateField(key, {
+                          type: 'gradient',
+                          color2: config.color2 ?? '#ffffff',
+                        })
+                      }
+                    />
+                    Gradient
+                  </label>
                 </div>
 
-                {config.type === 'gradient' && (
+                {/* Color Picker */}
+                <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label>Color 2</Label>
+                    <Label>Color 1</Label>
                     <Input
                       type="color"
-                      value={config.color2 || '#ffffff'}
+                      value={config.color1}
                       onChange={(e) =>
-                        updateField(key, { color2: e.target.value })
+                        updateField(key, { color1: e.target.value })
                       }
                     />
                   </div>
-                )}
-              </div>
 
-              {/* Manual Input */}
-              <div className="mt-3">
-                <Label>ใส่โค้ดสีเอง (เช่น #fff หรือ linear-gradient)</Label>
-                <Input
-                  value={
-                    config.type === 'solid'
-                      ? config.color1
-                      : `linear-gradient(135deg, ${config.color1}, ${config.color2})`
-                  }
-                  onChange={(e) => {
-                    const value = e.target.value.trim()
+                  {config.type === 'gradient' && (
+                    <div>
+                      <Label>Color 2</Label>
+                      <Input
+                        type="color"
+                        value={config.color2 || '#ffffff'}
+                        onChange={(e) =>
+                          updateField(key, { color2: e.target.value })
+                        }
+                      />
+                    </div>
+                  )}
+                </div>
 
-                    // ❌ ถ้าไม่ได้ขึ้นต้นด้วย linear-gradient → ถือว่าเป็น solid
-                    if (!value.startsWith('linear-gradient')) {
-                      updateField(key, {
-                        type: 'solid',
-                        color1: value,
-                      })
-                      return
+                {/* Manual Input */}
+                <div className="mt-3">
+                  <Label>ใส่โค้ดสีเอง (เช่น #fff หรือ linear-gradient)</Label>
+                  <Input
+                    value={
+                      config.type === 'solid'
+                        ? config.color1
+                        : `linear-gradient(135deg, ${config.color1}, ${config.color2})`
                     }
+                    onChange={(e) => {
+                      const value = e.target.value.trim()
 
-                    // ✅ ใช่ gradient → parse แบบปลอดภัย
-                    const match = value.match(
-                      /linear-gradient\([^,]+,\s*([^,]+),\s*([^)]+)\)/
-                    )
+                      // ถ้าไม่ใช่ gradient -> ถือเป็น solid
+                      if (!value.startsWith('linear-gradient')) {
+                        updateField(key, {
+                          type: 'solid',
+                          color1: value,
+                          color2: undefined,
+                        })
+                        return
+                      }
 
-                    if (match) {
-                      updateField(key, {
-                        type: 'gradient',
-                        color1: match[1].trim(),
-                        color2: match[2].trim(),
-                      })
-                    }
-                  }}
-                />
+                      // parse gradient
+                      const match = value.match(
+                        /linear-gradient\([^,]+,\s*([^,]+),\s*([^)]+)\)/
+                      )
+
+                      if (match) {
+                        updateField(key, {
+                          type: 'gradient',
+                          color1: match[1].trim(),
+                          color2: match[2].trim(),
+                        })
+                      }
+                    }}
+                  />
+                </div>
               </div>
-            </div>
-          ))}
+            )
+          })}
         </div>
 
         <div className="flex justify-end gap-3 mt-6">

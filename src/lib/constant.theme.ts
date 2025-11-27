@@ -14,6 +14,58 @@ export const THEME_MAP: Record<Mode, string> = {
   // menu ไม่ต้องใช้ theme
   "menu": "theme-menu",
 };
+
+export const THEME_KEYS_BY_MODE = {
+  "code-quiz": [
+    "mainBg",
+    "questionCodeBg",
+    "questionCodeTextColor",
+    "questionBg",
+    "questionTextColor",
+    "choiceBg",
+    "choiceTextColor",
+    "circleBg",
+    "circleTextColor",
+    "correctBg",
+    "correctTextColor"
+  ],
+
+  "multiple-quiz": [
+    "mainBg",
+    "questionCodeBg",
+    "questionCodeTextColor",
+    "questionBg",
+    "questionTextColor",
+    "choiceBg",
+    "choiceTextColor",
+    "circleBg",
+    "circleTextColor",
+    "correctBg",
+    "correctTextColor"
+  ],
+
+  "code-image": [
+    "mainBg",
+    "questionCodeBg",
+    "questionBg",
+    "questionTextColor",
+    "choiceBg",
+    "choiceTextColor",
+    "correctBg",
+    "correctTextColor",
+    "circleBg",
+    "circleTextColor"
+  ],
+
+  "junior-senior": [
+    "mainBg",
+    "questionCodeBg",        // ใช้เป็นพื้นหลัง code box
+    "questionCodeTextColor", // ใช้สำหรับ text code
+    "circleBg",
+    "circleTextColor"
+  ],
+};
+
 export type Mode =
   | 'menu'
   | 'code-quiz'
