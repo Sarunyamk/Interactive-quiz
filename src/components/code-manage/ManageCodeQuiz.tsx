@@ -256,6 +256,7 @@ export function ManageCodeQuiz({
       </div>
       {openTheme && (
         <ThemeSettingsModal
+          mode={'code-quiz'}
           theme={theme}
           onChange={(updated) => setTheme(updated)}
           onClose={() => setOpenTheme(false)}

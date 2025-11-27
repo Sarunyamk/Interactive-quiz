@@ -305,6 +305,7 @@ export function ManageCodeImage({
       </div>
       {openTheme && (
         <ThemeSettingsModal
+          mode="code-image"
           theme={theme}
           onChange={(updated) => setTheme(updated)}
           onClose={() => setOpenTheme(false)}

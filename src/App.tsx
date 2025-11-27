@@ -13,7 +13,7 @@ import { ManageMultipleQuiz } from './components/code-manage/ManageMultipleQuiz'
 import { Button } from './components/ui/button'
 import { THEME_KEYS_BY_MODE, THEME_MAP, type Mode } from './lib/constant.theme'
 import { defaultTheme, menuButtons } from './lib/data'
-import { toCSS } from './lib/theme.helper'
+import { getBaseMode, toCSS } from './lib/theme.helper'
 import type { ThemeConfig } from './lib/theme.type'
 import { cn } from './lib/utils'
 import { Gradients } from './style'
@@ -24,29 +24,36 @@ export default function App() {
   const [theme, setTheme] = useState<ThemeConfig>(defaultTheme)
 
   const themeKey = THEME_MAP[mode]
-
   useEffect(() => {
     const saved = localStorage.getItem(themeKey)
 
-    if (!saved) return setTheme(defaultTheme)
+    if (!saved) {
+      setTheme(defaultTheme)
+      return
+    }
 
     const obj = JSON.parse(saved)
-    const allowedKeys = THEME_KEYS_BY_MODE[mode.replace('manage-', '')] ?? []
 
-    const merged: any = {}
+    const base = getBaseMode(mode)
+    if (!base) return // menu case
 
-    // เอาเฉพาะคีย์ที่ allowed เท่านั้น
+    const allowedKeys = THEME_KEYS_BY_MODE[base]
+
+    const merged: Partial<ThemeConfig> = {}
     allowedKeys.forEach((k) => {
       merged[k] = obj[k] ?? defaultTheme[k]
     })
 
-    setTheme(merged)
+    setTheme(merged as ThemeConfig)
   }, [mode])
 
   useEffect(() => {
-    const keys = THEME_KEYS_BY_MODE[mode.replace('manage-', '')] ?? []
+    const base = getBaseMode(mode)
+    if (!base) return
 
-    const filteredTheme: any = {}
+    const keys = THEME_KEYS_BY_MODE[base]
+    const filteredTheme: Partial<ThemeConfig> = {}
+
     keys.forEach((k) => {
       filteredTheme[k] = theme[k]
     })
