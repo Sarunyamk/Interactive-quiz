@@ -1,19 +1,21 @@
-import { useState, useEffect } from 'react'
+import type { ThemeConfig } from '@/lib/theme.type'
 import { motion } from 'framer-motion'
 import {
-  Plus,
-  Trash2,
-  Edit2,
-  Save,
-  X,
-  ChevronUp,
   ChevronDown,
+  ChevronUp,
+  Edit2,
+  Plus,
+  Save,
+  Trash2,
+  X,
 } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { ThemeSettingsModal } from '../ThemeSettingsModal'
 import { Button } from '../ui/button'
 import { Card } from '../ui/card'
+import { Input } from '../ui/input'
 import { Label } from '../ui/label'
 import { Textarea } from '../ui/textarea'
-import { Input } from '../ui/input'
 
 interface QuizItem {
   questionText?: string
@@ -31,11 +33,15 @@ interface MultipleQuizSet {
 interface ManageMultipleQuizProps {
   onSelect: (quizSet: MultipleQuizSet) => void
   onBack: () => void
+  theme: ThemeConfig
+  setTheme: (t: ThemeConfig) => void
 }
 
 export function ManageMultipleQuiz({
   onSelect,
   onBack,
+  theme,
+  setTheme,
 }: ManageMultipleQuizProps) {
   const [quizSets, setQuizSets] = useState<MultipleQuizSet[]>([])
   const [isEditing, setIsEditing] = useState(false)
@@ -43,6 +49,7 @@ export function ManageMultipleQuiz({
   const [setName, setSetName] = useState('')
   const [quizzes, setQuizzes] = useState<QuizItem[]>([])
   const [editingQuizIndex, setEditingQuizIndex] = useState<number | null>(null)
+  const [openTheme, setOpenTheme] = useState(false)
   const [quizFormData, setQuizFormData] = useState({
     questionText: '',
     question: '',
@@ -402,11 +409,22 @@ export function ManageMultipleQuiz({
             <Plus className="w-4 h-4 mr-2" />
             เพิ่มชุดคำถาม
           </Button>
+          <Button variant="outline" onClick={() => setOpenTheme(true)}>
+            ⚙️ ตั้งค่า Theme
+          </Button>
           <Button onClick={onBack} variant="outline">
             กลับ
           </Button>
         </div>
       </div>
+
+      {openTheme && (
+        <ThemeSettingsModal
+          theme={theme}
+          onChange={(updated) => setTheme(updated)}
+          onClose={() => setOpenTheme(false)}
+        />
+      )}
 
       <div className="grid grid-cols-1 gap-4">
         {quizSets.length === 0 ? (

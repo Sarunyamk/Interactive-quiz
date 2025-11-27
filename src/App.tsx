@@ -1,68 +1,58 @@
-import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Code, Image, Users, ListChecks, Settings } from 'lucide-react'
+import { Settings } from 'lucide-react'
+import { useEffect, useState } from 'react'
 
-import { Button } from './components/ui/button'
-import { ManageCodeQuiz } from './components/code-manage/ManageCodeQuiz'
-import { ManageCodeImage } from './components/code-manage/ManageCodeImage'
-import { ManageJuniorSenior } from './components/code-manage/ManageJuniorSenior'
-import { ManageMultipleQuiz } from './components/code-manage/ManageMultipleQuiz'
-import { CodeQuiz } from './components/code-content/CodeQuiz'
 import { CodeImage } from './components/code-content/CodeImage'
 import { CodeJuniorVsSenior } from './components/code-content/CodeJuniorVsSenior'
 import { CodeMultipleQuiz } from './components/code-content/CodeMultipleQuiz'
-import { Gradients } from './style'
+import { CodeQuiz } from './components/code-content/CodeQuiz'
+import { ManageCodeImage } from './components/code-manage/ManageCodeImage'
+import { ManageCodeQuiz } from './components/code-manage/ManageCodeQuiz'
+import { ManageJuniorSenior } from './components/code-manage/ManageJuniorSenior'
+import { ManageMultipleQuiz } from './components/code-manage/ManageMultipleQuiz'
+import { Button } from './components/ui/button'
+import { THEME_KEYS_BY_MODE, THEME_MAP, type Mode } from './lib/constant.theme'
+import { defaultTheme, menuButtons } from './lib/data'
+import { toCSS } from './lib/theme.helper'
+import type { ThemeConfig } from './lib/theme.type'
 import { cn } from './lib/utils'
-
-type Mode =
-  | 'menu'
-  | 'code-quiz'
-  | 'code-image'
-  | 'junior-senior'
-  | 'multiple-quiz'
-  | 'manage-code-quiz'
-  | 'manage-code-image'
-  | 'manage-junior-senior'
-  | 'manage-multiple-quiz'
-
-const menuButtons = [
-  {
-    id: 'code-quiz' as Mode,
-    manageId: 'manage-code-quiz' as Mode,
-    icon: Code,
-    title: 'Code Quiz',
-    description: 'คำถามโค้ด + ตัวเลือก',
-    color: 'from-purple-500 to-blue-500',
-  },
-  {
-    id: 'code-image' as Mode,
-    manageId: 'manage-code-image' as Mode,
-    icon: Image,
-    title: 'Code Image',
-    description: 'รูปภาพคำถาม + ตัวเลือก',
-    color: 'from-pink-500 to-rose-500',
-  },
-  {
-    id: 'junior-senior' as Mode,
-    manageId: 'manage-junior-senior' as Mode,
-    icon: Users,
-    title: 'Junior vs Senior',
-    description: 'เปรียบเทียบโค้ด Junior & Senior',
-    color: 'from-green-500 to-emerald-500',
-  },
-  {
-    id: 'multiple-quiz' as Mode,
-    manageId: 'manage-multiple-quiz' as Mode,
-    icon: ListChecks,
-    title: 'Multiple Quiz',
-    description: 'ชุดคำถามหลายข้อ',
-    color: 'from-orange-500 to-amber-500',
-  },
-]
+import { Gradients } from './style'
 
 export default function App() {
   const [mode, setMode] = useState<Mode>('menu')
   const [selectedQuiz, setSelectedQuiz] = useState<any>(null)
+  const [theme, setTheme] = useState<ThemeConfig>(defaultTheme)
+
+  const themeKey = THEME_MAP[mode]
+
+  useEffect(() => {
+    const saved = localStorage.getItem(themeKey)
+
+    if (!saved) return setTheme(defaultTheme)
+
+    const obj = JSON.parse(saved)
+    const allowedKeys = THEME_KEYS_BY_MODE[mode.replace('manage-', '')] ?? []
+
+    const merged: any = {}
+
+    // เอาเฉพาะคีย์ที่ allowed เท่านั้น
+    allowedKeys.forEach((k) => {
+      merged[k] = obj[k] ?? defaultTheme[k]
+    })
+
+    setTheme(merged)
+  }, [mode])
+
+  useEffect(() => {
+    const keys = THEME_KEYS_BY_MODE[mode.replace('manage-', '')] ?? []
+
+    const filteredTheme: any = {}
+    keys.forEach((k) => {
+      filteredTheme[k] = theme[k]
+    })
+
+    localStorage.setItem(themeKey, JSON.stringify(filteredTheme))
+  }, [theme, mode])
 
   if (mode === 'menu') {
     return (
@@ -131,6 +121,8 @@ export default function App() {
         )}
       >
         <ManageCodeQuiz
+          theme={theme}
+          setTheme={setTheme}
           onSelect={(quiz) => {
             setSelectedQuiz(quiz)
             setMode('code-quiz')
@@ -150,6 +142,8 @@ export default function App() {
         )}
       >
         <ManageCodeImage
+          theme={theme}
+          setTheme={setTheme}
           onSelect={(quiz) => {
             setSelectedQuiz(quiz)
             setMode('code-image')
@@ -169,6 +163,8 @@ export default function App() {
         )}
       >
         <ManageJuniorSenior
+          theme={theme}
+          setTheme={setTheme}
           onSelect={(data) => {
             setSelectedQuiz(data)
             setMode('junior-senior')
@@ -188,6 +184,8 @@ export default function App() {
         )}
       >
         <ManageMultipleQuiz
+          theme={theme}
+          setTheme={setTheme}
           onSelect={(quizSet) => {
             setSelectedQuiz(quizSet)
             setMode('multiple-quiz')
@@ -200,12 +198,10 @@ export default function App() {
 
   return (
     <div
-      className={cn(
-        'min-h-screen flex items-center justify-center p-4',
-        Gradients.cool
-      )}
+      className="min-h-screen flex items-center justify-center p-4"
+      style={toCSS(theme.mainBg)}
     >
-      <div className="w-full max-w-7xl">
+      <div className="w-full max-w-7xl mx-auto">
         <div className="mb-10">
           <Button
             onClick={() => setMode('menu')}
@@ -222,13 +218,17 @@ export default function App() {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.3 }}
         >
-          {mode === 'code-quiz' && <CodeQuiz quizData={selectedQuiz} />}
-          {mode === 'code-image' && <CodeImage quizData={selectedQuiz} />}
+          {mode === 'code-quiz' && (
+            <CodeQuiz quizData={selectedQuiz} theme={theme} />
+          )}
+          {mode === 'code-image' && (
+            <CodeImage quizData={selectedQuiz} theme={theme} />
+          )}
           {mode === 'junior-senior' && (
-            <CodeJuniorVsSenior codeData={selectedQuiz} />
+            <CodeJuniorVsSenior codeData={selectedQuiz} theme={theme} />
           )}
           {mode === 'multiple-quiz' && (
-            <CodeMultipleQuiz quizzes={selectedQuiz?.quizzes} />
+            <CodeMultipleQuiz quizzes={selectedQuiz?.quizzes} theme={theme} />
           )}
         </motion.div>
       </div>

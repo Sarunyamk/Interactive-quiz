@@ -1,9 +1,11 @@
-import { useState, useEffect } from 'react'
+import { toCSS } from '@/lib/theme.helper'
+import type { ThemeConfig } from '@/lib/theme.type'
 import { AnimatePresence, motion } from 'framer-motion'
-import { TypewriterText } from '../TypewriterText'
+import { useEffect, useState } from 'react'
 import { Confetti } from '../Confetti'
 import { CountdownTimer } from '../CountdownTimer'
 import { FadeInMotion } from '../FadeInUp'
+import { TypewriterText } from '../TypewriterText'
 
 interface QuizData {
   question: string
@@ -14,9 +16,10 @@ interface QuizData {
 
 interface CodeQuizProps {
   quizData: QuizData
+  theme: ThemeConfig
 }
 
-export function CodeQuiz({ quizData }: CodeQuizProps) {
+export function CodeQuiz({ quizData, theme }: CodeQuizProps) {
   const [questionComplete, setQuestionComplete] = useState(false)
   const [showOptions, setShowOptions] = useState(0)
   const [showTimer, setShowTimer] = useState(false)
@@ -49,10 +52,16 @@ export function CodeQuiz({ quizData }: CodeQuizProps) {
     setShowAnswer(true)
     setCelebrate(true)
   }
-
   return (
-    <div className="w-full max-w-2xl mx-auto p-6 space-y-6 bg-transparent">
-      <FadeInMotion direction='left' className="bg-gray-900 rounded-2xl p-8 shadow-lg text-purple-700">
+    <div className="w-full max-w-2xl mx-auto p-6 space-y-6">
+      <FadeInMotion
+        direction="left"
+        className="rounded-2xl p-8 shadow-lg "
+        style={{
+          ...toCSS(theme.questionCodeBg),
+          ...toCSS(theme.questionCodeTextColor),
+        }}
+      >
         <div className="font-mono text-lg">
           <TypewriterText
             text={quizData.question}
@@ -64,7 +73,13 @@ export function CodeQuiz({ quizData }: CodeQuizProps) {
 
       {/* Question Text */}
       {questionComplete && quizData.questionText && (
-        <FadeInMotion className="text-center text-xl text-white bg-gray-900 backdrop-blur rounded-xl p-4 shadow-md">
+        <FadeInMotion
+          className="text-center text-xl backdrop-blur rounded-xl p-4 shadow-md"
+          style={{
+            ...toCSS(theme.questionBg),
+            ...toCSS(theme.questionTextColor),
+          }}
+        >
           {quizData.questionText}
         </FadeInMotion>
       )}
@@ -88,24 +103,28 @@ export function CodeQuiz({ quizData }: CodeQuizProps) {
                     duration: 0.3,
                     scale: { duration: 0.5, delay: 0 },
                   }}
-                  className={`relative p-6 rounded-xl shadow-md transition-all ${
-                    showAnswer && index === quizData.correctAnswer
-                      ? 'bg-linear-to-r from-green-400 to-emerald-500 text-white'
-                      : 'bg-white hover:shadow-lg'
-                  }`}
+                  style={{
+                    ...(showAnswer && index === quizData.correctAnswer
+                      ? toCSS(theme.correctBg)
+                      : toCSS(theme.choiceBg)),
+                    ...(showAnswer && index === quizData.correctAnswer
+                      ? toCSS(theme.correctTextColor)
+                      : toCSS(theme.choiceTextColor)),
+                  }}
+                  className="relative p-6 rounded-xl shadow-md transition-all"
                 >
                   {showAnswer &&
                     index === quizData.correctAnswer &&
                     celebrate && <Confetti />}
                   <div className="flex items-center gap-4">
                     <div
-                      className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                        showAnswer && index === quizData.correctAnswer
-                          ? 'bg-white text-green-500'
-                          : 'bg-linear-to-r from-purple-500 to-blue-500 text-white'
-                      }`}
+                      className={`w-10 h-10 rounded-full flex items-center justify-center`}
+                      style={{
+                        ...toCSS(theme.circleBg),
+                        ...toCSS(theme.circleTextColor),
+                      }}
                     >
-                      {letter}
+                      {letter}A
                     </div>
                     <div className="flex-1 font-mono">
                       {quizData.options[index]}
@@ -124,9 +143,7 @@ export function CodeQuiz({ quizData }: CodeQuizProps) {
 
       <AnimatePresence>
         {showAnswer && (
-          <FadeInMotion
-            className="mt-6 text-center"
-          >
+          <FadeInMotion className="mt-6 text-center">
             <motion.div
               animate={{
                 scale: [1, 1.1, 1],

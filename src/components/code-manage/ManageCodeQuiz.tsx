@@ -1,10 +1,12 @@
-import { useState, useEffect } from 'react'
+import type { ThemeConfig } from '@/lib/theme.type'
 import { motion } from 'framer-motion'
-import { Plus, Trash2, Edit2, Save, X } from 'lucide-react'
-import { Card } from '../ui/card'
-import { Label } from '../ui/label'
-import { Input } from '../ui/input'
+import { Edit2, Plus, Save, Trash2, X } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { ThemeSettingsModal } from '../ThemeSettingsModal'
 import { Button } from '../ui/button'
+import { Card } from '../ui/card'
+import { Input } from '../ui/input'
+import { Label } from '../ui/label'
 import { Textarea } from '../ui/textarea'
 
 interface QuizData {
@@ -18,12 +20,20 @@ interface QuizData {
 interface ManageCodeQuizProps {
   onSelect: (quiz: QuizData) => void
   onBack: () => void
+  theme: ThemeConfig
+  setTheme: (t: ThemeConfig) => void
 }
 
-export function ManageCodeQuiz({ onSelect, onBack }: ManageCodeQuizProps) {
+export function ManageCodeQuiz({
+  onSelect,
+  onBack,
+  theme,
+  setTheme,
+}: ManageCodeQuizProps) {
   const [quizzes, setQuizzes] = useState<QuizData[]>([])
   const [isEditing, setIsEditing] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
+  const [openTheme, setOpenTheme] = useState(false)
   const [formData, setFormData] = useState({
     question: '',
     questionText: '',
@@ -236,11 +246,21 @@ export function ManageCodeQuiz({ onSelect, onBack }: ManageCodeQuizProps) {
             <Plus className="w-4 h-4 mr-2" />
             เพิ่มคำถาม
           </Button>
+          <Button variant="outline" onClick={() => setOpenTheme(true)}>
+            ⚙️ ตั้งค่า Theme
+          </Button>
           <Button onClick={onBack} variant="outline">
             กลับ
           </Button>
         </div>
       </div>
+      {openTheme && (
+        <ThemeSettingsModal
+          theme={theme}
+          onChange={(updated) => setTheme(updated)}
+          onClose={() => setOpenTheme(false)}
+        />
+      )}
 
       <div className="grid grid-cols-1 gap-4">
         {quizzes.length === 0 ? (
