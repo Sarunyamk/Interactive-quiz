@@ -191,3 +191,21 @@ Button{
 html {
   font-size: var(--font-size);
 }
+
+/* ─── Shiki Code Block Styling ─── */
+.shiki-wrapper pre {
+  overflow-x: auto;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+.shiki-wrapper code {
+  font-family: 'Fira Code', 'JetBrains Mono', ui-monospace, monospace;
+}
+
+.shiki-code-block {
+  position: relative;
+}

@@ -5,11 +5,12 @@ import { useEffect, useState } from 'react'
 import { Confetti } from '../Confetti'
 import { CountdownTimer } from '../CountdownTimer'
 import { FadeInMotion } from '../FadeInUp'
-import { TypewriterText } from '../TypewriterText'
+import { ShikiCodeBlock } from '../ShikiCodeBlock'
 
 interface QuizItem {
   questionText?: string
   question: string
+  language?: string
   options: string[]
   correctAnswer: number
 }
@@ -113,19 +114,16 @@ export function CodeMultipleQuiz({ quizzes, theme }: MultipleQuizProps) {
       <FadeInMotion
         direction="left"
         key={currentQuizIndex}
-        className="rounded-2xl p-8 shadow-lg"
-        style={{
-          ...toCSS(theme.questionCodeBg),
-          ...toCSS(theme.questionCodeTextColor),
-        }}
+        className="rounded-2xl shadow-lg overflow-hidden"
+        style={toCSS(theme.questionCodeBg)}
       >
-        <div className="font-mono text-lg">
-          <TypewriterText
-            text={currentQuiz.question}
-            delay={30}
-            onComplete={() => setQuestionComplete(true)}
-          />
-        </div>
+        <ShikiCodeBlock
+          code={currentQuiz.question}
+          language={currentQuiz.language}
+          animate
+          delay={30}
+          onComplete={() => setQuestionComplete(true)}
+        />
       </FadeInMotion>
 
       {questionComplete && currentQuiz.questionText && (
@@ -134,7 +132,7 @@ export function CodeMultipleQuiz({ quizzes, theme }: MultipleQuizProps) {
           className="text-center text-xl backdrop-blur rounded-xl p-4 shadow-md"
           style={{
             ...toCSS(theme.questionBg),
-            ...toCSS(theme.questionTextColor),
+            ...toCSS(theme.questionTextColor, 'text'),
           }}
         >
           {currentQuiz.questionText}
@@ -143,7 +141,7 @@ export function CodeMultipleQuiz({ quizzes, theme }: MultipleQuizProps) {
 
       {/* Options */}
       {questionComplete && (
-        <div className="grid grid-cols-1 gap-4">
+        <div className="grid grid-cols-2 gap-4">
           {['A', 'B', 'C', 'D'].map(
             (letter, index) =>
               index < showOptions && (
@@ -167,8 +165,8 @@ export function CodeMultipleQuiz({ quizzes, theme }: MultipleQuizProps) {
                       ? toCSS(theme.correctBg)
                       : toCSS(theme.choiceBg)),
                     ...(showAnswer && index === currentQuiz.correctAnswer
-                      ? toCSS(theme.correctTextColor)
-                      : toCSS(theme.choiceTextColor)),
+                      ? toCSS(theme.correctTextColor, 'text')
+                      : toCSS(theme.choiceTextColor, 'text')),
                   }}
                   className="relative p-6 rounded-xl shadow-md transition-all"
                 >
@@ -177,10 +175,10 @@ export function CodeMultipleQuiz({ quizzes, theme }: MultipleQuizProps) {
                     celebrate && <Confetti />}
                   <div className="flex items-center gap-4">
                     <div
-                      className={`w-10 h-10 rounded-full flex items-center justify-center`}
+                      className="w-10 h-10 rounded-full flex items-center justify-center"
                       style={{
                         ...toCSS(theme.circleBg),
-                        ...toCSS(theme.circleTextColor),
+                        ...toCSS(theme.circleTextColor, 'text'),
                       }}
                     >
                       {letter}
@@ -222,7 +220,7 @@ export function CodeMultipleQuiz({ quizzes, theme }: MultipleQuizProps) {
               </motion.div>
             </FadeInMotion>
 
-            {/* ✅ overlay countdown */}
+            {/* overlay countdown */}
             <AnimatePresence>
               {showOverlay && currentQuizIndex < quizzes.length - 1 && (
                 <motion.div
@@ -247,7 +245,7 @@ export function CodeMultipleQuiz({ quizzes, theme }: MultipleQuizProps) {
               )}
             </AnimatePresence>
 
-            {/* ✅ overlay ตอนจบ */}
+            {/* overlay ตอนจบ */}
             <AnimatePresence>
               {showOverlay && currentQuizIndex === quizzes.length - 1 && (
                 <motion.div
@@ -267,7 +265,7 @@ export function CodeMultipleQuiz({ quizzes, theme }: MultipleQuizProps) {
                       🎉 How many questions did you get right ?
                     </div>
                     <div className="text-2xl text-gray-200">
-                      Thank you for playing 🎯
+                      Thank you for watching 🎯
                     </div>
                   </motion.div>
                 </motion.div>

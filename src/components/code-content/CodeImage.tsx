@@ -56,19 +56,19 @@ export function CodeImage({ quizData, theme }: CodeImageProps) {
     <div className="w-full max-w-2xl mx-auto p-6 space-y-6">
       <FadeInMotion
         className="rounded-2xl p-8 shadow-lg"
-        style={{
-          ...toCSS(theme.questionCodeBg),
-        }}
+        style={toCSS(theme.questionCodeBg)}
       >
-        <motion.img
-          src={quizData.imageUrl}
-          alt="Quiz question"
-          className="w-full rounded-lg"
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5 }}
-          onLoad={() => setImageLoaded(true)}
-        />
+        <div className="w-full max-h-[280px] rounded-lg overflow-hidden">
+          <motion.img
+            src={quizData.imageUrl}
+            alt="Quiz question"
+            className="w-full h-full object-cover"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5 }}
+            onLoad={() => setImageLoaded(true)}
+          />
+        </div>
       </FadeInMotion>
 
       {/* Question Text */}
@@ -76,9 +76,9 @@ export function CodeImage({ quizData, theme }: CodeImageProps) {
         <FadeInMotion
           direction="left"
           className="text-center text-xl backdrop-blur rounded-xl p-4 shadow-md"
-           style={{
+          style={{
             ...toCSS(theme.questionBg),
-            ...toCSS(theme.questionTextColor),
+            ...toCSS(theme.questionTextColor, 'text'),
           }}
         >
           {quizData.questionText}
@@ -87,7 +87,7 @@ export function CodeImage({ quizData, theme }: CodeImageProps) {
 
       {/* Options */}
       {imageLoaded && (
-        <div className="grid grid-cols-1 gap-4">
+        <div className="grid grid-cols-2 gap-4">
           {['A', 'B', 'C', 'D'].map(
             (letter, index) =>
               index < showOptions && (
@@ -109,8 +109,8 @@ export function CodeImage({ quizData, theme }: CodeImageProps) {
                       ? toCSS(theme.correctBg)
                       : toCSS(theme.choiceBg)),
                     ...(showAnswer && index === quizData.correctAnswer
-                      ? toCSS(theme.correctTextColor)
-                      : toCSS(theme.choiceTextColor)),
+                      ? toCSS(theme.correctTextColor, 'text')
+                      : toCSS(theme.choiceTextColor, 'text')),
                   }}
                   className="relative p-6 rounded-xl shadow-md transition-all"
                 >
@@ -119,10 +119,10 @@ export function CodeImage({ quizData, theme }: CodeImageProps) {
                     celebrate && <Confetti />}
                   <div className="flex items-center gap-4">
                     <div
-                      className={`w-10 h-10 rounded-full flex items-center justify-center`}
+                      className="w-10 h-10 rounded-full flex items-center justify-center"
                       style={{
                         ...toCSS(theme.circleBg),
-                        ...toCSS(theme.circleTextColor),
+                        ...toCSS(theme.circleTextColor, 'text'),
                       }}
                     >
                       {letter}

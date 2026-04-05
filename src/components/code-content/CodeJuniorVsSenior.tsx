@@ -3,11 +3,12 @@ import type { ThemeConfig } from '@/lib/theme.type'
 import { motion } from 'framer-motion'
 import { useState } from 'react'
 import { FadeInMotion } from '../FadeInUp'
-import { TypewriterText } from '../TypewriterText'
+import { ShikiCodeBlock } from '../ShikiCodeBlock'
 
 interface JuniorVsSeniorData {
   juniorCode: string
   seniorCode: string
+  language?: string
 }
 
 interface JuniorVsSeniorProps {
@@ -19,45 +20,46 @@ export function CodeJuniorVsSenior({ codeData, theme }: JuniorVsSeniorProps) {
   const [juniorComplete, setJuniorComplete] = useState(false)
 
   return (
-    <div className="w-full max-w-2xl mx-auto p-6 space-y-6">
+    <div className="relative w-full max-w-2xl mx-auto p-6 space-y-6">
       <FadeInMotion
         direction="left"
-        className="rounded-2xl p-8 shadow-lg"
-        style={{
-          ...toCSS(theme.questionCodeBg),
-          ...toCSS(theme.questionCodeTextColor),
-        }}
+        className="rounded-2xl shadow-lg overflow-hidden"
+        style={toCSS(theme.questionCodeBg)}
       >
-        <div className="mb-4 flex items-center gap-2">
-          <div className="w-3 h-3 rounded-full bg-blue-600"></div>
-          <span className="text-yellow-500">Junior Developer</span>
+        <div className="px-8 pt-6 pb-2">
+          <div className="flex items-center gap-2">
+            <div className="w-3 h-3 rounded-full bg-blue-600"></div>
+            <span className="text-yellow-500">Junior Developer</span>
+          </div>
         </div>
-        <div className="font-mono text-lg">
-          <TypewriterText
-            text={codeData.juniorCode}
-            delay={30}
-            onComplete={() => setJuniorComplete(true)}
-          />
-        </div>
+        <ShikiCodeBlock
+          code={codeData.juniorCode}
+          language={codeData.language}
+          animate
+          delay={30}
+          onComplete={() => setJuniorComplete(true)}
+        />
       </FadeInMotion>
 
       {/* Senior Code Box */}
       {juniorComplete && (
         <FadeInMotion
           direction="left"
-          className=" rounded-2xl p-8 shadow-lg "
-          style={{
-            ...toCSS(theme.questionCodeBg),
-            ...toCSS(theme.questionCodeTextColor),
-          }}
+          className="rounded-2xl shadow-lg overflow-hidden"
+          style={toCSS(theme.questionCodeBg)}
         >
-          <div className="mb-4 flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-green-500"></div>
-            <span className="text-yellow-500">Senior Developer</span>
+          <div className="px-8 pt-6 pb-2">
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full bg-green-500"></div>
+              <span className="text-yellow-500">Senior Developer</span>
+            </div>
           </div>
-          <div className="font-mono text-lg">
-            <TypewriterText text={codeData.seniorCode} delay={30} />
-          </div>
+          <ShikiCodeBlock
+            code={codeData.seniorCode}
+            language={codeData.language}
+            animate
+            delay={30}
+          />
         </FadeInMotion>
       )}
 
@@ -70,10 +72,10 @@ export function CodeJuniorVsSenior({ codeData, theme }: JuniorVsSeniorProps) {
           transition={{ type: 'spring', duration: 0.8 }}
         >
           <div
-            className="w-16 h-16 rounded-full  flex items-center justify-center  shadow-xl"
+            className="w-16 h-16 rounded-full flex items-center justify-center shadow-xl"
             style={{
               ...toCSS(theme.circleBg),
-              ...toCSS(theme.circleTextColor),
+              ...toCSS(theme.circleTextColor, 'text'),
             }}
           >
             VS

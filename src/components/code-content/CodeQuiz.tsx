@@ -5,11 +5,12 @@ import { useEffect, useState } from 'react'
 import { Confetti } from '../Confetti'
 import { CountdownTimer } from '../CountdownTimer'
 import { FadeInMotion } from '../FadeInUp'
-import { TypewriterText } from '../TypewriterText'
+import { ShikiCodeBlock } from '../ShikiCodeBlock'
 
 interface QuizData {
   question: string
   questionText?: string
+  language?: string
   options: string[]
   correctAnswer: number
 }
@@ -56,19 +57,16 @@ export function CodeQuiz({ quizData, theme }: CodeQuizProps) {
     <div className="w-full max-w-2xl mx-auto p-6 space-y-6">
       <FadeInMotion
         direction="left"
-        className="rounded-2xl p-8 shadow-lg "
-        style={{
-          ...toCSS(theme.questionCodeBg),
-          ...toCSS(theme.questionCodeTextColor),
-        }}
+        className="rounded-2xl shadow-lg overflow-hidden"
+        style={toCSS(theme.questionCodeBg)}
       >
-        <div className="font-mono text-lg">
-          <TypewriterText
-            text={quizData.question}
-            delay={50}
-            onComplete={() => setQuestionComplete(true)}
-          />
-        </div>
+        <ShikiCodeBlock
+          code={quizData.question}
+          language={quizData.language}
+          animate
+          delay={50}
+          onComplete={() => setQuestionComplete(true)}
+        />
       </FadeInMotion>
 
       {/* Question Text */}
@@ -77,7 +75,7 @@ export function CodeQuiz({ quizData, theme }: CodeQuizProps) {
           className="text-center text-xl backdrop-blur rounded-xl p-4 shadow-md"
           style={{
             ...toCSS(theme.questionBg),
-            ...toCSS(theme.questionTextColor),
+            ...toCSS(theme.questionTextColor, 'text'),
           }}
         >
           {quizData.questionText}
@@ -86,7 +84,7 @@ export function CodeQuiz({ quizData, theme }: CodeQuizProps) {
 
       {/* Options */}
       {questionComplete && (
-        <div className="grid grid-cols-1 gap-4">
+        <div className="grid grid-cols-2 gap-4">
           {['A', 'B', 'C', 'D'].map(
             (letter, index) =>
               index < showOptions && (
@@ -108,8 +106,8 @@ export function CodeQuiz({ quizData, theme }: CodeQuizProps) {
                       ? toCSS(theme.correctBg)
                       : toCSS(theme.choiceBg)),
                     ...(showAnswer && index === quizData.correctAnswer
-                      ? toCSS(theme.correctTextColor)
-                      : toCSS(theme.choiceTextColor)),
+                      ? toCSS(theme.correctTextColor, 'text')
+                      : toCSS(theme.choiceTextColor, 'text')),
                   }}
                   className="relative p-6 rounded-xl shadow-md transition-all"
                 >
@@ -118,13 +116,13 @@ export function CodeQuiz({ quizData, theme }: CodeQuizProps) {
                     celebrate && <Confetti />}
                   <div className="flex items-center gap-4">
                     <div
-                      className={`w-10 h-10 rounded-full flex items-center justify-center`}
+                      className="w-10 h-10 rounded-full flex items-center justify-center"
                       style={{
                         ...toCSS(theme.circleBg),
-                        ...toCSS(theme.circleTextColor),
+                        ...toCSS(theme.circleTextColor, 'text'),
                       }}
                     >
-                      {letter}A
+                      {letter}
                     </div>
                     <div className="flex-1 font-mono">
                       {quizData.options[index]}

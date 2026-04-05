@@ -1,11 +1,16 @@
 import type { BaseMode, Mode } from './constant.theme'
 import type { ThemeColor } from './theme.type'
 
-export function toCSS(themeColor: ThemeColor) {
+export function toCSS(
+  themeColor: ThemeColor,
+  property: 'background' | 'text' = 'background'
+): React.CSSProperties {
+  if (property === 'text') {
+    return { color: themeColor.color1 }
+  }
+
   if (themeColor.type === 'solid') {
-    return {
-      backgroundColor: themeColor.color1,
-    }
+    return { backgroundColor: themeColor.color1 }
   }
 
   return {
