@@ -1,5 +1,6 @@
 import {
   THEME_KEYS_BY_MODE,
+  THEME_KEY_LABELS,
   type BaseMode,
   type ThemeKey,
 } from '@/lib/constant.theme'
@@ -49,7 +50,7 @@ export function ThemeSettingsModal({ theme, onChange, onClose, mode }: Props) {
 
             return (
               <div key={key} className="border p-4 rounded-xl bg-gray-50">
-                <h3 className="font-semibold mb-2">{key}</h3>
+                <h3 className="font-semibold mb-2">{THEME_KEY_LABELS[key]}</h3>
 
                 {/* Toggle Solid / Gradient */}
                 <div className="flex gap-4 mb-3">

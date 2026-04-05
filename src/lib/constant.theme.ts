@@ -66,6 +66,20 @@ export const THEME_KEYS_BY_MODE = {
   ],
 }as const
 
+export const THEME_KEY_LABELS: Record<ThemeKey, string> = {
+  mainBg: "พื้นหลังหน้าหลัก",
+  questionCodeBg: "พื้นหลัง Code Box",
+  questionCodeTextColor: "สีตัวอักษรใน Code Box",
+  questionBg: "พื้นหลังกล่องคำถาม",
+  questionTextColor: "สีตัวอักษรคำถาม",
+  choiceBg: "พื้นหลังตัวเลือก",
+  choiceTextColor: "สีตัวอักษรตัวเลือก",
+  circleBg: "พื้นหลังวงกลมหมายเลข",
+  circleTextColor: "สีตัวเลขในวงกลม",
+  correctBg: "พื้นหลังคำตอบที่ถูก",
+  correctTextColor: "สีตัวอักษรคำตอบที่ถูก",
+}
+
 export type BaseMode = keyof typeof THEME_KEYS_BY_MODE
 export type ThemeKey = (typeof THEME_KEYS_BY_MODE)[BaseMode][number]
 
