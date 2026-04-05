@@ -1,87 +1,87 @@
 export const THEME_MAP: Record<Mode, string> = {
-  "manage-code-quiz": "theme-manage-code-quiz",
-  "code-quiz": "theme-manage-code-quiz",
+  'manage-code-quiz': 'theme-manage-code-quiz',
+  'code-quiz': 'theme-manage-code-quiz',
 
-  "manage-code-image": "theme-manage-code-image",
-  "code-image": "theme-manage-code-image",
+  'manage-code-image': 'theme-manage-code-image',
+  'code-image': 'theme-manage-code-image',
 
-  "manage-junior-senior": "theme-manage-junior-senior",
-  "junior-senior": "theme-manage-junior-senior",
+  'manage-junior-senior': 'theme-manage-junior-senior',
+  'junior-senior': 'theme-manage-junior-senior',
 
-  "manage-multiple-quiz": "theme-manage-multiple-quiz",
-  "multiple-quiz": "theme-manage-multiple-quiz",
+  'manage-multiple-quiz': 'theme-manage-multiple-quiz',
+  'multiple-quiz': 'theme-manage-multiple-quiz',
 
   // menu ไม่ต้องใช้ theme
-  "menu": "theme-menu",
+  menu: 'theme-menu',
 };
 
 export const THEME_KEYS_BY_MODE = {
-  "code-quiz": [
-    "mainBg",
-    "questionCodeBg",
-    "questionCodeTextColor",
-    "questionBg",
-    "questionTextColor",
-    "choiceBg",
-    "choiceTextColor",
-    "circleBg",
-    "circleTextColor",
-    "correctBg",
-    "correctTextColor"
+  'code-quiz': [
+    'mainBg',
+    // "questionCodeBg",
+    // "questionCodeTextColor",
+    'questionBg',
+    'questionTextColor',
+    'choiceBg',
+    'choiceTextColor',
+    'circleBg',
+    'circleTextColor',
+    'correctBg',
+    'correctTextColor',
   ],
 
-  "multiple-quiz": [
-    "mainBg",
-    "questionCodeBg",
-    "questionCodeTextColor",
-    "questionBg",
-    "questionTextColor",
-    "choiceBg",
-    "choiceTextColor",
-    "circleBg",
-    "circleTextColor",
-    "correctBg",
-    "correctTextColor"
+  'multiple-quiz': [
+    'mainBg',
+    // "questionCodeBg",
+    // "questionCodeTextColor",
+    'questionBg',
+    'questionTextColor',
+    'choiceBg',
+    'choiceTextColor',
+    'circleBg',
+    'circleTextColor',
+    'correctBg',
+    'correctTextColor',
   ],
 
-  "code-image": [
-    "mainBg",
-    "questionCodeBg",
-    "questionBg",
-    "questionTextColor",
-    "choiceBg",
-    "choiceTextColor",
-    "correctBg",
-    "correctTextColor",
-    "circleBg",
-    "circleTextColor"
+  'code-image': [
+    'mainBg',
+    // "questionCodeBg",
+    'questionBg',
+    'questionTextColor',
+    'choiceBg',
+    'choiceTextColor',
+    'correctBg',
+    'correctTextColor',
+    'circleBg',
+    'circleTextColor',
   ],
 
-  "junior-senior": [
-    "mainBg",
-    "questionCodeBg",        // ใช้เป็นพื้นหลัง code box
-    "questionCodeTextColor", // ใช้สำหรับ text code
-    "circleBg",
-    "circleTextColor"
+  'junior-senior': [
+    'mainBg',
+    // "questionCodeBg",        // ใช้เป็นพื้นหลัง code box
+    // "questionCodeTextColor", // ใช้สำหรับ text code
+    'circleBg',
+    'circleTextColor',
   ],
-}as const
+} as const;
 
 export const THEME_KEY_LABELS: Record<ThemeKey, string> = {
-  mainBg: "พื้นหลังหน้าหลัก",
-  questionCodeBg: "พื้นหลัง Code Box",
-  questionCodeTextColor: "สีตัวอักษรใน Code Box",
-  questionBg: "พื้นหลังกล่องคำถาม",
-  questionTextColor: "สีตัวอักษรคำถาม",
-  choiceBg: "พื้นหลังตัวเลือก",
-  choiceTextColor: "สีตัวอักษรตัวเลือก",
-  circleBg: "พื้นหลังวงกลมหมายเลข",
-  circleTextColor: "สีตัวเลขในวงกลม",
-  correctBg: "พื้นหลังคำตอบที่ถูก",
-  correctTextColor: "สีตัวอักษรคำตอบที่ถูก",
-}
+  mainBg: 'พื้นหลังหน้าหลัก',
+  // questionCodeBg: "พื้นหลัง Code Box",
+  // questionCodeTextColor: "สีตัวอักษรใน Code Box",
+  questionBg: 'พื้นหลังกล่องคำถาม',
+  questionTextColor: 'สีตัวอักษรคำถาม',
+  choiceBg: 'พื้นหลังตัวเลือกคำตอบ',
+  choiceTextColor: 'สีตัวอักษรของข้อความคำตอบ',
+  circleBg: 'พื้นหลังวงกลมหมายเลขหน้าคำตอบ',
+  circleTextColor: 'สีตัวเลขในวงกลม',
+  correctBg: 'พื้นหลังคำตอบที่ถูก',
+  correctTextColor: 'สีตัวอักษรคำตอบที่ถูก',
+};
 
-export type BaseMode = keyof typeof THEME_KEYS_BY_MODE
-export type ThemeKey = (typeof THEME_KEYS_BY_MODE)[BaseMode][number]
+export type BaseMode = keyof typeof THEME_KEYS_BY_MODE;
+export type ThemeKey = (typeof THEME_KEYS_BY_MODE)[BaseMode][number];
 
 // export type Mode =
 //   | 'menu'
@@ -94,7 +94,4 @@ export type ThemeKey = (typeof THEME_KEYS_BY_MODE)[BaseMode][number]
 //   | 'manage-junior-senior'
 //   | 'manage-multiple-quiz'
 
-export type Mode =
-  | 'menu'
-  | BaseMode
-  | `manage-${BaseMode}`
+export type Mode = 'menu' | BaseMode | `manage-${BaseMode}`;

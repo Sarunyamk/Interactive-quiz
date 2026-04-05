@@ -115,7 +115,7 @@ export function CodeMultipleQuiz({ quizzes, theme }: MultipleQuizProps) {
         direction="left"
         key={currentQuizIndex}
         className="rounded-2xl shadow-lg overflow-hidden"
-        style={toCSS(theme.questionCodeBg)}
+        // style={toCSS(theme.questionCodeBg)}
       >
         <ShikiCodeBlock
           code={currentQuiz.question}

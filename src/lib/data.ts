@@ -4,8 +4,8 @@ import type { ThemeConfig } from './theme.type'
 
 export const defaultTheme: ThemeConfig = {
   mainBg: { type: 'solid', color1: '#111827' },
-  questionCodeBg: { type: 'solid', color1: '#1f2937' },
-  questionCodeTextColor: { type: 'solid', color1: '#ffffff' },
+  // questionCodeBg: { type: 'solid', color1: '#1f2937' },
+  // questionCodeTextColor: { type: 'solid', color1: '#ffffff' },
   questionBg: { type: 'solid', color1: '#1f2937' },
   questionTextColor: { type: 'solid', color1: '#ffffff' },
   choiceBg: { type: 'solid', color1: '#ffffff' },

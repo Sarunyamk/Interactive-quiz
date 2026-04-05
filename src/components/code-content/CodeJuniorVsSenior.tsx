@@ -1,30 +1,30 @@
-import { toCSS } from '@/lib/theme.helper'
-import type { ThemeConfig } from '@/lib/theme.type'
-import { motion } from 'framer-motion'
-import { useState } from 'react'
-import { FadeInMotion } from '../FadeInUp'
-import { ShikiCodeBlock } from '../ShikiCodeBlock'
+import { toCSS } from '@/lib/theme.helper';
+import type { ThemeConfig } from '@/lib/theme.type';
+import { motion } from 'framer-motion';
+import { useState } from 'react';
+import { FadeInMotion } from '../FadeInUp';
+import { ShikiCodeBlock } from '../ShikiCodeBlock';
 
 interface JuniorVsSeniorData {
-  juniorCode: string
-  seniorCode: string
-  language?: string
+  juniorCode: string;
+  seniorCode: string;
+  language?: string;
 }
 
 interface JuniorVsSeniorProps {
-  codeData: JuniorVsSeniorData
-  theme: ThemeConfig
+  codeData: JuniorVsSeniorData;
+  theme: ThemeConfig;
 }
 
 export function CodeJuniorVsSenior({ codeData, theme }: JuniorVsSeniorProps) {
-  const [juniorComplete, setJuniorComplete] = useState(false)
+  const [juniorComplete, setJuniorComplete] = useState(false);
 
   return (
     <div className="relative w-full max-w-2xl mx-auto p-6 space-y-6">
       <FadeInMotion
         direction="left"
         className="rounded-2xl shadow-lg overflow-hidden"
-        style={toCSS(theme.questionCodeBg)}
+        // style={toCSS(theme.questionCodeBg)}
       >
         <div className="px-8 pt-6 pb-2">
           <div className="flex items-center gap-2">
@@ -46,7 +46,7 @@ export function CodeJuniorVsSenior({ codeData, theme }: JuniorVsSeniorProps) {
         <FadeInMotion
           direction="left"
           className="rounded-2xl shadow-lg overflow-hidden"
-          style={toCSS(theme.questionCodeBg)}
+          // style={toCSS(theme.questionCodeBg)}
         >
           <div className="px-8 pt-6 pb-2">
             <div className="flex items-center gap-2">
@@ -83,5 +83,5 @@ export function CodeJuniorVsSenior({ codeData, theme }: JuniorVsSeniorProps) {
         </motion.div>
       )}
     </div>
-  )
+  );
 }

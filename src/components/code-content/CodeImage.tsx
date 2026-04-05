@@ -1,62 +1,62 @@
-import type { ThemeConfig } from '@/lib/theme.type'
-import { AnimatePresence, motion } from 'framer-motion'
-import { useEffect, useState } from 'react'
-import { Confetti } from '../Confetti'
-import { CountdownTimer } from '../CountdownTimer'
-import { FadeInMotion } from '../FadeInUp'
-import { toCSS } from '@/lib/theme.helper'
+import { toCSS } from '@/lib/theme.helper';
+import type { ThemeConfig } from '@/lib/theme.type';
+import { AnimatePresence, motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
+import { Confetti } from '../Confetti';
+import { CountdownTimer } from '../CountdownTimer';
+import { FadeInMotion } from '../FadeInUp';
 
 interface ImageQuizData {
-  imageUrl: string
-  questionText?: string
-  options: string[]
-  correctAnswer: number
+  imageUrl: string;
+  questionText?: string;
+  options: string[];
+  correctAnswer: number;
 }
 
 interface CodeImageProps {
-  quizData: ImageQuizData
-  theme: ThemeConfig
+  quizData: ImageQuizData;
+  theme: ThemeConfig;
 }
 
 export function CodeImage({ quizData, theme }: CodeImageProps) {
-  const [imageLoaded, setImageLoaded] = useState(false)
-  const [showOptions, setShowOptions] = useState(0)
-  const [showTimer, setShowTimer] = useState(false)
-  const [showAnswer, setShowAnswer] = useState(false)
-  const [celebrate, setCelebrate] = useState(false)
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [showOptions, setShowOptions] = useState(0);
+  const [showTimer, setShowTimer] = useState(false);
+  const [showAnswer, setShowAnswer] = useState(false);
+  const [celebrate, setCelebrate] = useState(false);
 
   useEffect(() => {
-    setImageLoaded(false)
-    setShowOptions(0)
-    setShowTimer(false)
-    setShowAnswer(false)
-    setCelebrate(false)
-  }, [quizData])
+    setImageLoaded(false);
+    setShowOptions(0);
+    setShowTimer(false);
+    setShowAnswer(false);
+    setCelebrate(false);
+  }, [quizData]);
 
   useEffect(() => {
     if (imageLoaded && showOptions < 4) {
       const timer = setTimeout(() => {
-        setShowOptions((prev) => prev + 1)
-      }, 300)
-      return () => clearTimeout(timer)
+        setShowOptions((prev) => prev + 1);
+      }, 300);
+      return () => clearTimeout(timer);
     } else if (imageLoaded && showOptions === 4) {
       const timer = setTimeout(() => {
-        setShowTimer(true)
-      }, 3000)
-      return () => clearTimeout(timer)
+        setShowTimer(true);
+      }, 3000);
+      return () => clearTimeout(timer);
     }
-  }, [imageLoaded, showOptions])
+  }, [imageLoaded, showOptions]);
 
   const handleTimerComplete = () => {
-    setShowAnswer(true)
-    setCelebrate(true)
-  }
+    setShowAnswer(true);
+    setCelebrate(true);
+  };
 
   return (
     <div className="w-full max-w-2xl mx-auto p-6 space-y-6">
       <FadeInMotion
         className="rounded-2xl p-8 shadow-lg"
-        style={toCSS(theme.questionCodeBg)}
+        // style={toCSS(theme.questionCodeBg)}
       >
         <div className="w-full max-h-[280px] rounded-lg overflow-hidden">
           <motion.img
@@ -165,5 +165,5 @@ export function CodeImage({ quizData, theme }: CodeImageProps) {
         )}
       </AnimatePresence>
     </div>
-  )
+  );
 }

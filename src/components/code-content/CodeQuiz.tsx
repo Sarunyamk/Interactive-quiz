@@ -58,7 +58,7 @@ export function CodeQuiz({ quizData, theme }: CodeQuizProps) {
       <FadeInMotion
         direction="left"
         className="rounded-2xl shadow-lg overflow-hidden"
-        style={toCSS(theme.questionCodeBg)}
+        // style={toCSS(theme.questionCodeBg)}
       >
         <ShikiCodeBlock
           code={quizData.question}
